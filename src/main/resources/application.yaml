@@ -1,0 +1,29 @@
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - gateway
+          - health
+          - info
+  server:
+    port: 8090
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: httpbin-route
+          uri: https://httpbingo.org
+          predicates:
+            - Path=/anything/**
+          filters:
+            - StripPrefix=0
+        - id: default-route
+          uri: ${DEFAULT_ROUTE_URI:https://httpbingo.org}
+          predicates:
+            - Path=/**
+          filters:
+            - StripPrefix=0
